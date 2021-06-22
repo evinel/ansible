@@ -1,0 +1,23 @@
+yum install -y epel-release
+yum install -y sshpass
+
+en USer 
+python3 -m venv ansible
+
+source ansible/bin/activate
+
+ansible -i k8s/inventory/k8s_test.yml -m ping http1 --user root
+ssh-keygen
+ssh-copy-id -i ~/.ssh/id_rsa root@bdd1
+ssh-copy-id -i ~/.ssh/id_rsa root@http1
+
+ansible -i k8s/inventory/k8s_test.yml -m raw -a "yum install -y python3" all --user root
+ansible localhost -i k8s/inventory/k8s_test.ym -m debug -a "msg={{ 'passforce' | password_hash('sha512', 'secretsalt') }}"
+
+ansible -i k8s/inventory/k8s_test.yml -m user -a 'name=rancher password=$6$secretsalt$X5YDmUgDphPxnMkByvHbNaiP4T5Uk0WjEZ9TukWKQnXmXN81jG3DcGZnNJiSz9ltgPhplH92HOR/RqgmyS.zN1' --user root all
+ansible -i k8s/inventory/k8s_test.yml -m user -a 'name=rancher groups=wheel append=yes' --user root all
+ansible -i k8s/inventory/k8s_test.yml -m user -a 'name=rancher groups=wheel append=yes' --user rancher --become --ask-become-pass --ask-pass all
+ansible -i k8s/inventory/k8s_test.yml -m authorized_key -a 'user=rancher state=present key="{{ lookup("file", "/home/user/.ssh/id_rsa.pub") }}" ' --user rancher --ask-pass all
+ansible -i k8s/inventory/k8s_test.yml -m lineinfile -a 'path=/etc/sudoers line="%wheel        ALL=(ALL)       NOPASSWD: ALL" regexp="%wheel        ALL=(ALL)       NOPASSWD: ALL"' --user rancher --become --ask-become-pass all
+
+ansible-playbook -i k8s/inventory/k8s_test.yml --user rancher --become install_rancher.yml

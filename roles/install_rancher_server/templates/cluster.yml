@@ -1,0 +1,12 @@
+nodes:
+    - address:  {{ hostvars[inventory_hostname].ansible_host }} 
+      user: rancher
+      role:
+        - controlplane
+        - etcd
+        - worker
+      port: 22
+
+cluster_name: {{ cluster_name }}
+kubernetes_version: {{ kubernetes_version }}
+

@@ -1,0 +1,19 @@
+---
+- hosts: rancher
+  become: yes
+  gather_facts: true
+
+  vars_files:
+      - group_vars/k8s.yml
+
+
+  vars:
+    - user: rancher
+    - cluster_name: rancher-server-{{ environnement }}
+    - kubernetes_version: v1.19.10-rancher1-1
+
+
+
+  roles:
+    - install_docker
+    - install_rancher_server
