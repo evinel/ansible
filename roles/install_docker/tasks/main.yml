@@ -1,5 +1,0 @@
----
-- name: Installing docker-ce
-  yum:
-    name: "{{ docker_version }}"
-    state: present
