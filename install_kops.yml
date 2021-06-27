@@ -1,0 +1,16 @@
+--
+- hosts: loalhost
+  become: yes
+  gather_facts: true
+
+  vars_files:
+      - group_vars/k8s.yml
+
+
+  vars:
+    - var1: value1
+
+
+
+  roles:
+    - configure_kops
