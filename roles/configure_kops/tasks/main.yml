@@ -15,11 +15,22 @@
     validate_certs: false
 
 - name: Update bashrc for PythonBrew for foo user
-   lineinfile:
-     dest: /home/ec2-user/.bashrc
-     line: "export KOPS_CLUSTER_NAME=evinel.in"
+  lineinfile:
+    dest: /home/ec2-user/.bashrc
+    line: "export KOPS_CLUSTER_NAME=evinel.in"
 
 - name: Update bashrc for PythonBrew for foo user
-   lineinfile:
-     dest: /home/ec2-user/.bashrc
-     line: "export KOPS_STATE_STORE=s3://evinel.in.k8s"
+  lineinfile:
+    dest: /home/ec2-user/.bashrc
+    line: "export KOPS_STATE_STORE=s3://evinel.in.k8s"
+
+- name: define k8s cluster
+  shell: "kops create cluster \
+          --state=${KOPS_STATE_STORE} \
+          --node-count=2 \
+          --master-size=t3.medium \
+          --node-size=t3.medium \
+          --zones=eu-west-3a,eu-west-3b \
+          --name=${KOPS_CLUSTER_NAME} \
+          --dns private \
+          --master-count 1"
