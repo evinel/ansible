@@ -1,16 +1,14 @@
---
-- hosts: loalhost
+- hosts: 127.0.0.1
+  connection: local
   become: yes
   gather_facts: true
 
-  vars_files:
-      - group_vars/k8s.yml
 
 
-  vars:
+vars:
     - var1: value1
 
 
 
-  roles:
+roles:
     - configure_kops

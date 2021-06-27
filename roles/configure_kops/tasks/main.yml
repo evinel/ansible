@@ -13,3 +13,13 @@
     dest: /usr/local/bin/kubectl
     mode: "+rx"
     validate_certs: false
+
+- name: Update bashrc for PythonBrew for foo user
+   lineinfile:
+     dest: /home/ec2-user/.bashrc
+     line: "export KOPS_CLUSTER_NAME=evinel.in"
+
+- name: Update bashrc for PythonBrew for foo user
+   lineinfile:
+     dest: /home/ec2-user/.bashrc
+     line: "export KOPS_STATE_STORE=s3://evinel.in.k8s"
